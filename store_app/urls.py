@@ -33,5 +33,5 @@ urlpatterns = [
 	url(r'^checkout-paypal/(?P<cart_token>[0-9A-Za-z_\-]+)/$', OderCheckoutPaypalView.as_view(), name='checkout-detail-api'),
 	url(r'^coupon/(?P<token>[0-9A-Za-z_\-]+)/$', AddCoupon.as_view(), name='coupon-add-api'),
     # add website detail with id url
-    path('website/<int:user_id>/<int:sec_id>/', WebsiteTemplateDetail.as_view(), name='website-template-detail'),
+    path('website/<int:user_id>/<int:template_id>/', WebsiteTemplateDetail.as_view(), name='website-template-detail'),
 ]

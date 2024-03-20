@@ -704,13 +704,14 @@ class OderCheckoutPaypalView(APIView):
 
 class WebsiteTemplateDetail(APIView):
     
-    def get(self, request, user_id, sec_id, format=None):
-        templates = WebsiteTemplate.objects.filter(user_id=user_id, id=sec_id).first()
+    def get(self, request, user_id,template_id, format=None):
+        templates = WebsiteTemplate.objects.filter(user_id=user_id)[template_id-1]
+        
         serializer = WebsiteTemplateSerializer(templates)
         return Response(serializer.data)
 
-    def put(self, request, user_id, sec_id, format=None):
-        template = WebsiteTemplate.objects.filter(user_id=user_id, id=sec_id).first()
+    def put(self, request, user_id,template_id, format=None):
+        template = WebsiteTemplate.objects.filter(user_id=user_id)[template_id-1]
         serializer = WebsiteTemplateSerializer(template, data=request.data)
         if serializer.is_valid():
             serializer.save()
