@@ -1,4 +1,8 @@
 from django.db import models
+# get User model
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 # Create your models here.
 
@@ -21,16 +25,19 @@ DISCOUNT_CHOICES = (
     ('FIJO', 'FIJO'),
 )
 
-
+COLLECTION_CHOICES = (
+    ('Luxury', 'Luxury'),
+    ('Etnik', 'Etnik'),
+)
 class CustomColor(models.Model):
-	title = models.CharField(max_length=256, default='')
+	title = models.CharField(max_length=256, default='', )
 	code = models.CharField(max_length=256, default='')
 
 	def __str__(self):
 		return self.code + " - " + self.title
 
 class CustomCollection(models.Model):
-	title = models.CharField(max_length=256, default='')
+	title = models.CharField(max_length=256, choices=COLLECTION_CHOICES, default='Luxury')
 	description = models.TextField(blank=True)
 	image = image = models.ImageField(upload_to='uploads/collections/', blank=True, null=True)
 
@@ -158,6 +165,7 @@ class Coupon(models.Model):
 
 
 class WebsiteTemplate(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     section1 = models.TextField(blank=True, null=True)
     section2 = models.TextField(blank=True, null=True)
     section3 = models.TextField(blank=True, null=True)

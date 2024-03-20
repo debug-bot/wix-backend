@@ -23,8 +23,10 @@ from .models import *
 from .serializers import *
 
 import stripe
+from django.contrib.auth import get_user_model
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
+User = get_user_model()
 
 
 
@@ -700,22 +702,15 @@ class OderCheckoutPaypalView(APIView):
 			return Response({"Result":"Error during payment"}, status=status.HTTP_400_BAD_REQUEST)
 
 
-
 class WebsiteTemplateDetail(APIView):
     
-    def get_object(self, pk):
-        try:
-            return WebsiteTemplate.objects.get(pk=pk)
-        except WebsiteTemplate.DoesNotExist:
-            raise Http404
-
-    def get(self, request, pk, format=None):
-        template = self.get_object(pk)
-        serializer = WebsiteTemplateSerializer(template)
+    def get(self, request, user_id, sec_id, format=None):
+        templates = WebsiteTemplate.objects.filter(user_id=user_id, id=sec_id).first()
+        serializer = WebsiteTemplateSerializer(templates)
         return Response(serializer.data)
 
-    def put(self, request, pk, format=None):
-        template = self.get_object(pk)
+    def put(self, request, user_id, sec_id, format=None):
+        template = WebsiteTemplate.objects.filter(user_id=user_id, id=sec_id).first()
         serializer = WebsiteTemplateSerializer(template, data=request.data)
         if serializer.is_valid():
             serializer.save()
