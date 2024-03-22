@@ -16,3 +16,11 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
 
 application = get_wsgi_application()
 # application = DjangoWhiteNoise(application)
+
+# from store_app.models import *
+
+# t = Templates.objects.all()
+
+# x = UserTemplate.objects.filter(user_id=1).first()
+
+# print(x.template.user_templates.all())

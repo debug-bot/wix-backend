@@ -1,6 +1,7 @@
 from django.db import models
 # get User model
 from django.contrib.auth import get_user_model
+from django.utils import timesince
 
 User = get_user_model()
 
@@ -177,4 +178,68 @@ class WebsiteTemplate(models.Model):
     
     def __str__(self):
     	return "Website Template"
+    
+    
+class UploadedImage(models.Model):
+    image = models.ImageField(upload_to='images/')
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+    
+    
+class Templates(models.Model):
+    image = models.ImageField(upload_to='templates/', blank=True, null=True)
+    title = models.CharField(max_length=256, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+    html_content = models.TextField(blank=True, null=True)
+    css_cotent = models.TextField(blank=True, null=True)
+    js_content = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, blank=True, null=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+	
+    def __str__(self):
+       return "Template " + self.title
+
+
+class UserTemplate(models.Model):
+	user = models.ForeignKey(User, related_name='templates', on_delete=models.CASCADE)
+	template = models.ForeignKey(Templates, related_name="user_templates", on_delete=models.CASCADE)
+	title = models.CharField(max_length=256, blank=True, null=True)
+	description = models.TextField(blank=True, null=True)
+	html_content = models.TextField(blank=True, null=True)
+	css_cotent = models.TextField(blank=True, null=True)
+	js_content = models.TextField(blank=True, null=True)
+	created_at = models.DateTimeField(auto_now_add=True)
+	updated_at = models.DateTimeField(auto_now=True)
+
+	def time_since_updated(self):
+		return timesince.timesince(self.updated_at)
+
+	def copy_template(self):
+		"""
+		Copies the relevant data from the linked template.
+		"""
+		self.title = self.template.title
+		self.description = self.template.description
+		self.html_content = self.template.html_content
+		self.css_cotent = self.template.css_cotent
+		self.js_content = self.template.js_content
+  
+	def save(self, *args, **kwargs):
+		"""
+		Overriding the save method to copy template data on creation.
+		"""
+		if not self.pk:  # Check if it's a new instance
+			self.copy_template()
+		super(UserTemplate, self).save(*args, **kwargs)
+  
+	class Meta:
+		ordering = ['-updated_at']
+
+
+	def __str__(self):
+		return "User Template " + self.time_since_updated() + " ago" + str(self.id)
+
+ 
     

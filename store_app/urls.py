@@ -34,4 +34,11 @@ urlpatterns = [
 	url(r'^coupon/(?P<token>[0-9A-Za-z_\-]+)/$', AddCoupon.as_view(), name='coupon-add-api'),
     # add website detail with id url
     path('website/<int:user_id>/<int:template_id>/', WebsiteTemplateDetail.as_view(), name='website-template-detail'),
+    path('upload-image/', ImageUploadView.as_view(), name='upload-image'),
+    path('templates/', AllTemplateView.as_view(), name='templates'),
+    path('templates/<int:template_id>/', GetTemplateView.as_view(), name='templates-id'),
+    path('user-template/<int:user_id>/', UserTemplateView.as_view(), name='user-template'),
+    path('user-template-detail/<int:user_id>/<int:user_template_id>/', UserTemplateDetailView.as_view(), name='user-template-detail'),
+    path('post-user-template/', PostUserTemplateView.as_view(), name='post-user-template'),
+    path('editor-template/<int:user_id>/<int:temp_id>/', EditorUserTemplateDetailView.as_view(), name='editor-template'),
 ]

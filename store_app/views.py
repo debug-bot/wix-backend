@@ -717,3 +717,94 @@ class WebsiteTemplateDetail(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    
+class ImageUploadView(APIView):
+    def post(self, request, format=None):
+        serializer = UploadedImageSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    
+class AllTemplateView(APIView):
+    
+    def get(self, request, format=None):
+        templates = Templates.objects.all()
+        serializer = TemplateSerializer(templates, many=True)
+        return Response(serializer.data)
+    
+class GetTemplateView(APIView):
+    	
+	def get(self, request, template_id, format=None):
+		templates = Templates.objects.filter(id=template_id).first()
+		serializer = TemplateSerializer(templates)
+		return Response(serializer.data, status=status.HTTP_200_OK)
+
+class UserTemplateView(APIView):
+    	
+	def get(self, request, user_id, format=None):
+		templates = UserTemplate.objects.filter(user_id=user_id)
+		serializer = UserTemplateSerializer(templates, many=True)
+		return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class UserTemplateDetailView(APIView):
+	def get(self, request, user_id, user_template_id, format=None):
+		templates = Templates.objects.filter(user_templates__user=user_id, user_templates__id=user_template_id).first()
+		serializer = TemplateSerializer(templates)
+		return Response(serializer.data, status=status.HTTP_200_OK)
+
+	def put(self, request, user_id, user_template_id, format=None):
+		try:
+			user_template = UserTemplate.objects.get(pk=user_id, user=user_template_id)
+		except UserTemplate.DoesNotExist:
+			return Response({"error": "UserTemplate not found"}, status=status.HTTP_404_NOT_FOUND)
+
+		template = user_template.template
+		serializer = TemplateSerializer(template, data=request.data, partial=True)
+		
+		if serializer.is_valid():
+			serializer.save()
+			return Response(serializer.data, status=status.HTTP_200_OK)
+		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+	def delete(self, request, user_id, user_template_id, format=None):
+		template = UserTemplate.objects.filter(user=user_id, id=user_template_id)
+		template.delete()
+		return Response(status=status.HTTP_204_NO_CONTENT)
+
+class PostUserTemplateView(APIView):
+	def post(self, request, format=None):
+		serializer = PostUserTemplateSerializer(data=request.data)
+		if serializer.is_valid():
+			serializer.save()
+			return Response(serializer.data, status=status.HTTP_201_CREATED)
+		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+from rest_framework.exceptions import PermissionDenied
+
+
+class EditorUserTemplateDetailView(APIView):
+    
+    def get_object(self, temp_id, user_id):
+        try:
+            return UserTemplate.objects.get(pk=temp_id, user_id=user_id)
+        except UserTemplate.DoesNotExist:
+            raise Http404
+
+    def get(self, request, user_id, temp_id, format=None):
+        user_template = self.get_object(temp_id, user_id)
+        serializer = EditorUserTemplateSerializer(user_template)
+        return Response(serializer.data)
+
+    def put(self, request, user_id, temp_id, format=None):
+        user_template = self.get_object(temp_id, user_id)
+        serializer = EditorUserTemplateSerializer(user_template, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+

@@ -165,3 +165,48 @@ class WebsiteTemplateSerializer(serializers.ModelSerializer):
     class Meta:
         model = WebsiteTemplate
         fields = '__all__'
+
+# ======================================================================================
+
+class UploadedImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UploadedImage
+        fields = ['image', 'uploaded_at']
+        
+# ======================================================================================
+
+class TemplateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Templates
+        fields = ['id', 'image', 'title', 'description', 'html_content', 'css_cotent', 'js_content']
+        read_only_fields = ['id', 'image', 'title', 'description']
+        
+# ======================================================================================
+
+class UserTemplateSerializer(serializers.ModelSerializer):
+    template = TemplateSerializer()
+
+
+    class Meta:
+        model = UserTemplate
+        fields = ['id', 'user', 'template', 'created_at', 'updated_at', 'time_since_updated']
+        read_only_fields = ['id', 'created_at', 'updated_at', 'time_since_updated']
+        
+        
+class PostUserTemplateSerializer(serializers.ModelSerializer):
+	template = serializers.PrimaryKeyRelatedField(queryset=Templates.objects.all())
+
+	class Meta:
+		model = UserTemplate
+		fields = ['id', 'user', 'template', 'created_at', 'updated_at', 'time_since_updated']
+		read_only_fields = ['id', 'created_at', 'updated_at', 'time_since_updated']
+
+class EditorUserTemplateSerializer(serializers.ModelSerializer):
+
+	class Meta:
+		model = UserTemplate
+		fields =  ['id', 'user', 'template', 'html_content', 'css_cotent', 'js_content']
+		read_only_fields = ['id', 'user', 'template']
+  
+  
+#   ['id', 'user', 'template', 'html_content', 'css_cotent', 'js_content']

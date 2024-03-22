@@ -33,7 +33,9 @@ from store_app.models import *
 
 def IndexView(request):
 	if request.user is None or request.user.is_authenticated == False:
-		return redirect('/store-admin/login/')
+		return redirect('/admin/')
+	if request.user:
+		return redirect('/admin/')
 
 	top_amount = min(len(Product.objects.all()),10)
 	top_ten = Product.objects.all().order_by('-amount_sold')[:2]
@@ -70,7 +72,7 @@ def LogoutView(request):
 
 def CategoriesView(request):
 	if request.user is None or request.user.is_authenticated == False:
-		return redirect('/store-admin/login/')
+		return redirect('/admin/')
 
 	if request.method == "GET":
 		categories = Category.objects.all()
@@ -85,7 +87,7 @@ def CategoriesView(request):
 
 def CollectionsView(request):
 	if request.user is None or request.user.is_authenticated == False:
-		return redirect('/store-admin/login/')
+		return redirect('/admin/')
 
 	if request.method == "GET":
 		collections = CustomCollection.objects.all()
@@ -101,7 +103,7 @@ def CollectionsView(request):
 
 def ProductsView(request):
 	if request.user is None or request.user.is_authenticated == False:
-		return redirect('/store-admin/login/')
+		return redirect('/admin/')
 
 	if request.method == "GET":
 		collections = CustomCollection.objects.all()
@@ -131,7 +133,7 @@ def ProductsView(request):
 
 def OrdersView(request):
 	if request.user is None or request.user.is_authenticated == False:
-		return redirect('/store-admin/login/')
+		return redirect('/admin/')
 
 	status_map = {"Ordered": "Pedido por cliente", "OrderedMex": "Pedido a Mexico",
 				  "ProdMex": "Produciendose en Mexico",
@@ -162,7 +164,7 @@ def OrdersView(request):
 
 def CustomColorsView(request):
 	if request.user is None or request.user.is_authenticated == False:
-		return redirect('/store-admin/login/')
+		return redirect('/admin/')
 
 	if request.method == "GET":
 		available_colors = CustomColor.objects.all()
@@ -187,7 +189,7 @@ def CustomColorsView(request):
 
 def OrderDetailView(request, id):
 	if request.user is None or request.user.is_authenticated == False:
-		return redirect('/store-admin/login/')
+		return redirect('/admin/')
 
 	if request.method == "GET":
 		order = Order.objects.get(id=id)

@@ -25,6 +25,8 @@ from store_admin_app.views import IndexView
 
 urlpatterns = [
 	path('admin/', admin.site.urls),
+	path('product/', include('products.urls')),
+	path('order/', include('orders.urls')),
 	url(r'^store/', include('store_app.urls', namespace='store-app-namespace')),
 	url(r'^account/', include('account.urls', namespace='account-namespace')),
 	url(r'^store-admin/', include('store_admin_app.urls', namespace='store-admin-app-namespace')),
