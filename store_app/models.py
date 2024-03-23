@@ -186,20 +186,24 @@ class UploadedImage(models.Model):
     
     
 class Templates(models.Model):
-    image = models.ImageField(upload_to='templates/', blank=True, null=True)
-    title = models.CharField(max_length=256, blank=True, null=True)
-    description = models.TextField(blank=True, null=True)
-    html_content = models.TextField(blank=True, null=True)
-    css_cotent = models.TextField(blank=True, null=True)
-    js_content = models.TextField(blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
-    updated_at = models.DateTimeField(auto_now=True, blank=True, null=True)
-    
-    class Meta:
-        ordering = ['-created_at']
+	image = models.ImageField(upload_to='templates/', blank=True, null=True)
+	title = models.CharField(max_length=256, blank=True, null=True)
+	description = models.TextField(blank=True, null=True)
+	html_content = models.TextField(blank=True, null=True)
+	html_content1 = models.TextField(blank=True, null=True)
+	html_content2 = models.TextField(blank=True, null=True)
+	html_content3 = models.TextField(blank=True, null=True)
+	css_cotent = models.TextField(blank=True, null=True)
+	js_content = models.TextField(blank=True, null=True)
+	ecommerce = models.BooleanField(default=False)
+	created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+	updated_at = models.DateTimeField(auto_now=True, blank=True, null=True)
 	
-    def __str__(self):
-       return "Template " + self.title
+	class Meta:
+		ordering = ['-created_at']
+	
+	def __str__(self):
+	    return "Template " + self.title + " " + str(self.id)
 
 
 class UserTemplate(models.Model):
@@ -208,8 +212,12 @@ class UserTemplate(models.Model):
 	title = models.CharField(max_length=256, blank=True, null=True)
 	description = models.TextField(blank=True, null=True)
 	html_content = models.TextField(blank=True, null=True)
+	html_content1 = models.TextField(blank=True, null=True)
+	html_content2 = models.TextField(blank=True, null=True)
+	html_content3 = models.TextField(blank=True, null=True)
 	css_cotent = models.TextField(blank=True, null=True)
 	js_content = models.TextField(blank=True, null=True)
+	ecommerce = models.BooleanField(default=False)
 	created_at = models.DateTimeField(auto_now_add=True)
 	updated_at = models.DateTimeField(auto_now=True)
 
@@ -225,6 +233,10 @@ class UserTemplate(models.Model):
 		self.html_content = self.template.html_content
 		self.css_cotent = self.template.css_cotent
 		self.js_content = self.template.js_content
+		self.html_content1 = self.template.html_content1
+		self.html_content2 = self.template.html_content2
+		self.html_content3 = self.template.html_content3
+		self.ecommerce = self.template.ecommerce
   
 	def save(self, *args, **kwargs):
 		"""

@@ -178,7 +178,7 @@ class UploadedImageSerializer(serializers.ModelSerializer):
 class TemplateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Templates
-        fields = ['id', 'image', 'title', 'description', 'html_content', 'css_cotent', 'js_content']
+        fields = "__all__"
         read_only_fields = ['id', 'image', 'title', 'description']
         
 # ======================================================================================
@@ -189,7 +189,7 @@ class UserTemplateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserTemplate
-        fields = ['id', 'user', 'template', 'created_at', 'updated_at', 'time_since_updated']
+        fields = ['id', 'user', 'template', "title", "description", 'created_at', 'updated_at', 'time_since_updated', "ecommerce"]
         read_only_fields = ['id', 'created_at', 'updated_at', 'time_since_updated']
         
         
@@ -205,7 +205,7 @@ class EditorUserTemplateSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = UserTemplate
-		fields =  ['id', 'user', 'template', 'html_content', 'css_cotent', 'js_content']
+		fields =  "__all__"
 		read_only_fields = ['id', 'user', 'template']
   
   

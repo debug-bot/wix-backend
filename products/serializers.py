@@ -26,6 +26,12 @@ class ProductSerializer(serializers.ModelSerializer):
             'countinStock',
             'created'
         ]
+        read_only_fields = ['category']
 
     def get_category_name(self, obj):
         return f'{obj.category}'
+    
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = '__all__'

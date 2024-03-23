@@ -15,22 +15,20 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from django.conf.urls import url,include, re_path
+from django.urls import include, re_path 
 from django.conf import settings
-from django.conf.urls.static import static
-from django.views.static import serve
-from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from store_admin_app.views import IndexView
+from django.conf.urls.static import static
 
 
 urlpatterns = [
 	path('admin/', admin.site.urls),
 	path('product/', include('products.urls')),
 	path('order/', include('orders.urls')),
-	url(r'^store/', include('store_app.urls', namespace='store-app-namespace')),
-	url(r'^account/', include('account.urls', namespace='account-namespace')),
-	url(r'^store-admin/', include('store_admin_app.urls', namespace='store-admin-app-namespace')),
-	url(r'^$', IndexView, name='website'),
+	re_path(r'^account/', include('account.urls', namespace='account-namespace')),
+	re_path(r'^store/', include('store_app.urls', namespace='store-app-namespace')),
+	re_path(r'^store-admin/', include('store_admin_app.urls', namespace='store-admin-app-namespace')),
+	re_path(r'^$', IndexView, name='website'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

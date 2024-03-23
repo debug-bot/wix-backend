@@ -778,6 +778,11 @@ class UserTemplateDetailView(APIView):
 class PostUserTemplateView(APIView):
 	def post(self, request, format=None):
 		serializer = PostUserTemplateSerializer(data=request.data)
+
+		# if user and template already added then do not create new, instead return error
+		if UserTemplate.objects.filter(user=request.data['user'], template=request.data['template']).exists():
+			return Response({"error": "UserTemplate already exists"}, status=status.HTTP_400_BAD_REQUEST)
+
 		if serializer.is_valid():
 			serializer.save()
 			return Response(serializer.data, status=status.HTTP_201_CREATED)
