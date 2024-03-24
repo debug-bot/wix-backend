@@ -210,3 +210,9 @@ class EditorUserTemplateSerializer(serializers.ModelSerializer):
   
   
 #   ['id', 'user', 'template', 'html_content', 'css_cotent', 'js_content']
+class QrcodeSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = QrCodeHistory
+		fields = ['id', 'user', 'url', 'time_since_updated']
+		read_only_fields = ['id', 'time_since_updated']
+  

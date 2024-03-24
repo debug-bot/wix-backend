@@ -255,3 +255,13 @@ class UserTemplate(models.Model):
 
  
     
+class QrCodeHistory(models.Model):
+	user = models.ForeignKey(User, on_delete=models.CASCADE)
+	url = models.URLField(max_length=200)
+	created_at = models.DateTimeField(auto_now_add=True)
+
+	def time_since_updated(self):
+		return timesince.timesince(self.created_at)
+
+	def __str__(self):
+		return f"{self.user.name}: {self.url}"

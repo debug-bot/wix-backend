@@ -16,3 +16,4 @@ from .models import *
 # admin.site.register(Coupon)
 admin.site.register(Templates)
 admin.site.register(UserTemplate)
+admin.site.register(QrCodeHistory)

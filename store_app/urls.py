@@ -40,4 +40,5 @@ urlpatterns = [
     path('user-template-detail/<int:user_id>/<int:user_template_id>/', UserTemplateDetailView.as_view(), name='user-template-detail'),
     path('post-user-template/', PostUserTemplateView.as_view(), name='post-user-template'),
     path('editor-template/<int:user_id>/<int:temp_id>/', EditorUserTemplateDetailView.as_view(), name='editor-template'),
+    path('qrcode-history/', QrcodeView.as_view(), name='qrcode-history'),
 ]

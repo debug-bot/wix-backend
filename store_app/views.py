@@ -813,3 +813,24 @@ class EditorUserTemplateDetailView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+class QrcodeView(APIView):
+    
+	def get(self, request, format=None):
+		user_id = request.GET.get('user_id')
+		qrcodes = QrCodeHistory.objects.filter(user_id=user_id)
+		serializer = QrcodeSerializer(qrcodes, many=True)
+		return Response(serializer.data)
+	
+	def post(self, request, format=None):
+		serializer = QrcodeSerializer(data=request.data)
+		if serializer.is_valid():
+			serializer.save()
+			return Response(serializer.data, status=status.HTTP_201_CREATED)
+		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+	def delete(self, request, format=None):
+		user_id = request.GET.get('user_id')
+		qrcode_id = request.GET.get('qrcode_id')
+		qrcodes = QrCodeHistory.objects.filter(user_id=user_id, id=qrcode_id)
+		qrcodes.delete()
+		return Response(status=status.HTTP_204_NO_CONTENT)
