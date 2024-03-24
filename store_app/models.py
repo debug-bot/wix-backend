@@ -257,11 +257,15 @@ class UserTemplate(models.Model):
     
 class QrCodeHistory(models.Model):
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
+	name = models.CharField(max_length=256, null=True, blank=True)
 	url = models.URLField(max_length=200)
 	created_at = models.DateTimeField(auto_now_add=True)
 
 	def time_since_updated(self):
 		return timesince.timesince(self.created_at)
 
-	def __str__(self):
+	def _str_(self):
 		return f"{self.user.name}: {self.url}"
+
+	class Meta:
+		ordering = ['-created_at']
